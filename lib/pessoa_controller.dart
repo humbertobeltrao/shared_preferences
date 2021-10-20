@@ -1,18 +1,17 @@
+import 'package:shared_pref/pessoa.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
 class PessoaCtrl {
-  List pessoas = [];
   add(String key, value) async {
-    pessoas.add(value);
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(key, json.encode(pessoas));
+    prefs.setString(key, value);
   }
 
   read(String key) async {
     final prefs = await SharedPreferences.getInstance();
-    return json.decode(prefs.getStringList(key).toString());
+
+    return json.decode(prefs.getString(key).toString());
   }
 
   remove(String key) async {

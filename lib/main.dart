@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_pref/pessoa.dart';
@@ -56,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController txtIdade = TextEditingController();
   TextEditingController txtEndereco = TextEditingController();
 
+  List<Map<String, dynamic>> pessoas = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,12 +112,12 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               ElevatedButton(
                   onPressed: () async {
-                    print(Pessoa.fromJson(await pController.read('user')[0])
-                        .nome);
+                    //print((await pController.read('user'))[0]['idade']);
+
                     Fluttertoast.showToast(
-                        msg: Pessoa.fromJson(await pController.read('user')[0])
-                            .nome
-                            .toString(),
+                        msg: (await pController.read('user'))[0]['nome'] +
+                            ", " +
+                            (await pController.read('user'))[0]['idade'],
                         toastLength: Toast.LENGTH_LONG,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,
@@ -130,14 +133,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: () => {
-          pController.add(
-              'user',
-              Pessoa(
-                      nome: txtNome.text,
-                      idade: txtIdade.text,
-                      endereco: txtEndereco.text)
-                  .toJson()),
-          print(Pessoa.fromJson(pController.read('user')).nome[0])
+          pessoas.add(Pessoa.toMap(Pessoa(
+            nome: txtNome.text,
+            idade: txtIdade.text,
+            endereco: txtEndereco.text,
+          ))),
+          pController.add('user', json.encode(pessoas))
         },
         child: Icon(Icons.send),
       ), // This trailing comma makes auto-formatting nicer for build methods.
