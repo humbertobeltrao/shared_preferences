@@ -1,6 +1,6 @@
 # shared_pref
 
-A new Flutter project.
+A new Flutter project implemented do discuss shared_preferences persistence mechanism.
 
 ## Getting Started
 
